@@ -9,15 +9,24 @@ import ballerina.net.ei;
 }
 service<fs> FileProcessor {
 
-    endpoint<ei:FileHttpClient> orderProcessorServiceEP {
-        create ei:FileHttpClient("http://localhost:9090/orders", {});
+    endpoint<http:HttpClient> orderProcessorServiceEP {
+        create http:HttpClient("http://localhost:9090/orders", {});
     }
 
     resource fileResource (fs:FileSystemEvent fsEvent) {
         string filename = fsEvent.name;
 
-        var orderProcessResponse, _ = orderProcessorServiceEP.post("/", filename);
+        // read file content
+        string content = ei:readTextFile(filename);
 
+        // create Http Request
+        http:Request request = {};
+        request.setStringPayload(content);
+
+        // invoke the backend
+        var orderProcessResponse, _ = orderProcessorServiceEP.post("/", request);
+
+        // handle response
         var orderProcessResponseJsonPayload = orderProcessResponse.getJsonPayload();
         println(orderProcessResponseJsonPayload);
     }
@@ -25,7 +34,7 @@ service<fs> FileProcessor {
 
 
 @http:configuration {basePath:"/orders"}
-service<http> OrderProcessor {
+service<http> OrderProcessorBackend {
 
     @http:resourceConfig {
         methods:["POST"],
