@@ -3,7 +3,7 @@ import ballerina.net.http;
 import ballerina.net.ei;
 
 @fs:configuration {
-    dirURI:"/home/eranda/wso2-source/ballerina-work/file-2-http/input/",
+    dirURI:"../../file-2-http/input/",
     events:"create",
     recursive:false
 }
