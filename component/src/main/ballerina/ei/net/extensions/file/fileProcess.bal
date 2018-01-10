@@ -1,7 +1,7 @@
-package ballerina.net.ei;
+package ei.net.extensions.file;
 
 import ballerina.io;
-import ballerina.file;
+import ballerina.file as fileRead;
 
 public function readTextFile(string fileName) (string) {
     io:CharacterChannel srcRecordChannel = getCharacterChannel(fileName, "r", "UTF-8");
@@ -11,7 +11,7 @@ public function readTextFile(string fileName) (string) {
 }
 
 function getCharacterChannel (string filePath, string permission, string encoding) (io:CharacterChannel) {
-    file:File src = {path:filePath};
+    fileRead:File src = {path:filePath};
     io:ByteChannel channel = src.openChannel(permission);
     io:CharacterChannel characterChannel = channel.toCharacterChannel(encoding);
     return characterChannel;

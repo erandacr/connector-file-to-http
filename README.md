@@ -3,7 +3,7 @@
 ```ballerina
 import ballerina.net.fs;
 import ballerina.net.http;
-import ballerina.net.ei;
+import ei.net.extensions.file;
 
 @fs:configuration {
     dirURI:"../../file-2-http/input/",
@@ -20,7 +20,7 @@ service<fs> FileProcessor {
         string filename = fsEvent.name;
         
         // read file content
-        string content = ei:readTextFile(filename);
+        string content = file:readTextFile(filename);
         
         // create Http Request
         http:Request request = {};

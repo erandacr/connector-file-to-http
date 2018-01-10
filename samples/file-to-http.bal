@@ -1,6 +1,6 @@
 import ballerina.net.fs;
 import ballerina.net.http;
-import ballerina.net.ei;
+import ei.net.extensions.file;
 
 @fs:configuration {
     dirURI:"../../file-2-http/input/",
@@ -17,7 +17,7 @@ service<fs> FileProcessor {
         string filename = fsEvent.name;
 
         // read file content
-        string content = ei:readTextFile(filename);
+        string content = file:readTextFile(filename);
 
         // create Http Request
         http:Request request = {};
@@ -28,6 +28,7 @@ service<fs> FileProcessor {
 
         // handle response
         var orderProcessResponseJsonPayload = orderProcessResponse.getJsonPayload();
+        print("Response from backend: ");
         println(orderProcessResponseJsonPayload);
     }
 }
@@ -42,7 +43,6 @@ service<http> OrderProcessorBackend {
     }
     resource processOrder (http:Request request, http:Response response) {
         string payload = request.getStringPayload();
-        println(payload);
         json responsePayload = {"OrderId": "12345", "Status": "Ok"};
 
         response.setJsonPayload(responsePayload);
